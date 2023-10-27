@@ -1,3 +1,11 @@
+import {
+  faPencil,
+  faEraser,
+  faRotateLeft,
+  faRotateRight,
+  faFileArrowDown,
+} from "@fortawesome/free-solid-svg-icons";
+
 const COLORS = {
   BLACK: "black",
   RED: "red",
@@ -8,11 +16,26 @@ const COLORS = {
   WHITE: "white",
 };
 const MENU_ITEMS = {
-  PENCIL: "PENCIL",
-  ERASER: "ERASER",
-  UNDO: "UNDO",
-  REDO: "REDO",
-  DOWNLOAD: "DOWNLOAD",
+  PENCIL: {
+    name: "PENCIL",
+    icon: faPencil,
+  },
+  ERASER: {
+    name: "ERASER",
+    icon: faEraser,
+  },
+  UNDO: {
+    name: "UNDO",
+    icon: faRotateLeft,
+  },
+  REDO: {
+    name: "REDO",
+    icon: faRotateRight,
+  },
+  DOWNLOAD: {
+    name: "DOWNLOAD",
+    icon: faFileArrowDown,
+  },
 };
 
 export { COLORS, MENU_ITEMS };
