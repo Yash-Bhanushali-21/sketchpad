@@ -1,26 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
-import { menuItemClick, actionItemClick } from "@/slice/menuSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import classNames from "classnames";
+import { useDispatch } from "react-redux";
 import { MENU_ITEMS } from "@/constants";
+import { menuItemClick } from "@/slice/menuSlice";
 import styles from "./index.module.css";
 
 const Menu = () => {
-  const activeMenuItem = useSelector((state) => state.menu.activeMenuItem);
   const dispatch = useDispatch();
 
   const handleMenuItemClick = (selectedIconName) => {
     dispatch(menuItemClick(selectedIconName));
-  };
-  const handleActionItemClick = (itemName) => {
-    dispatch(actionItemClick(itemName));
-  };
-  const handleItemPropagationFromType = (item) => {
-    if (item === MENU_ITEMS.PENCIL.name || item === MENU_ITEMS.ERASER.name) {
-      handleMenuItemClick(item);
-      return;
-    }
-    handleActionItemClick(item);
   };
 
   return (
@@ -28,15 +16,11 @@ const Menu = () => {
       {Object.keys(MENU_ITEMS).map((MENU_ITEM_KEY) => {
         const menuItem = MENU_ITEMS[MENU_ITEM_KEY];
 
-        const menuItemClasses = classNames(styles.iconWrapper, {
-          [styles.active]: activeMenuItem === menuItem,
-        });
-
         return (
           <div
-            className={menuItemClasses}
+            className={styles.iconWrapper}
             key={MENU_ITEM_KEY}
-            onClick={() => handleItemPropagationFromType(menuItem.name)}
+            onClick={() => handleMenuItemClick(menuItem.name)}
           >
             <FontAwesomeIcon
               data-itemname={menuItem.name}

@@ -1,26 +1,11 @@
-import { MENU_ITEMS } from "@/constants";
 import { useRef, useEffect, useLayoutEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 const Board = () => {
   const canvasRef = useRef(null);
   const shouldDraw = useRef(false);
-  const { activeMenuItem, actionMenuItem } = useSelector((state) => state.menu);
+  const activeMenuItem = useSelector((state) => state.menu.activeMenuItem);
   const { color, size } = useSelector((state) => state.toolbox[activeMenuItem]);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-
-    if (actionMenuItem === MENU_ITEMS.DOWNLOAD.name) {
-      const URL = canvas.toDataURL();
-      const anchor = document.createElement("a");
-      anchor.href = URL;
-      anchor.download = "sketch.jpg";
-      anchor.click();
-    }
-  }, [actionMenuItem]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -45,21 +30,15 @@ const Board = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const beginPath = (x, y) => {
-      context.beginPath();
-      context.moveTo(x, y);
-    };
-    const drawLine = (x, y) => {
-      context.lineTo(x, y);
-      context.stroke();
-    };
     const handleMouseDown = (e) => {
       shouldDraw.current = true;
-      beginPath(e.clientX, e.clientY);
+      context.beginPath();
+      context.moveTo(e.clientX, e.clientY);
     };
     const handleMouseMove = (e) => {
       if (!shouldDraw.current) return;
-      drawLine(e.clientX, e.clientY);
+      context.lineTo(e.clientX, e.clientY);
+      context.stroke();
     };
     const handleMouseUp = (e) => {
       shouldDraw.current = false;
