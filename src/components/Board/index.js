@@ -25,14 +25,18 @@ const Board = () => {
       anchor.href = URL;
       anchor.download = "sketch.jpg";
       anchor.click();
-    } else if (actionMenuItem === MENU_ITEMS.UNDO.name) {
+    } else if (
+      actionMenuItem === MENU_ITEMS.UNDO.name ||
+      actionMenuItem === MENU_ITEMS.REDO.name
+    ) {
+      const isUNDO = actionMenuItem === MENU_ITEMS.UNDO.name;
+
       if (historyPointer.current > 0) {
-        historyPointer.current -= 1;
+        if (isUNDO) historyPointer.current -= 1;
+        else historyPointer.current += 1;
       }
       const imageData = drawHistory.current[historyPointer.current];
       context.putImageData(imageData, 0, 0);
-    } else if (actionMenuItem === MENU_ITEMS.REDO.name) {
-    } else if (actionMenuItem === MENU_ITEMS.UNDO.name) {
     }
     dispatch(actionItemClick(null));
   }, [actionMenuItem, dispatch]);
