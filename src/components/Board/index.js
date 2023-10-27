@@ -1,11 +1,41 @@
 import { useRef, useEffect, useLayoutEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { MENU_ITEMS } from "@/constants";
+import { menuItemClick, actionItemClick } from "@/slice/menuSlice";
 
 const Board = () => {
+  const { activeMenuItem, actionMenuItem } = useSelector((state) => state.menu);
+  const { color, size } = useSelector((state) => state.toolbox[activeMenuItem]);
+
   const canvasRef = useRef(null);
   const shouldDraw = useRef(false);
-  const activeMenuItem = useSelector((state) => state.menu.activeMenuItem);
-  const { color, size } = useSelector((state) => state.toolbox[activeMenuItem]);
+  const drawHistory = useRef([]);
+  const historyPointer = useRef(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    if (actionMenuItem === MENU_ITEMS.DOWNLOAD.name) {
+      const URL = canvas.toDataURL();
+      const anchor = document.createElement("a");
+      anchor.href = URL;
+      anchor.download = "sketch.jpg";
+      anchor.click();
+    } else if (actionMenuItem === MENU_ITEMS.UNDO.name) {
+      if (historyPointer.current > 0) {
+        historyPointer.current -= 1;
+      }
+      const imageData = drawHistory.current[historyPointer.current];
+      context.putImageData(imageData, 0, 0);
+    } else if (actionMenuItem === MENU_ITEMS.REDO.name) {
+    } else if (actionMenuItem === MENU_ITEMS.UNDO.name) {
+    }
+    dispatch(actionItemClick(null));
+  }, [actionMenuItem, dispatch]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -42,6 +72,9 @@ const Board = () => {
     };
     const handleMouseUp = (e) => {
       shouldDraw.current = false;
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      drawHistory.current.push(imageData);
+      historyPointer.current = drawHistory.current.length - 1;
     };
 
     canvas.addEventListener("mousedown", handleMouseDown);
