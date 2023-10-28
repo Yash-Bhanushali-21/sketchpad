@@ -7,13 +7,14 @@ import {
 } from "@/hooks";
 
 const Board = () => {
+  const { activeMenuItem, actionMenuItem } = useSelector((state) => state.menu);
+  const { color, size } = useSelector((state) => state.toolbox[activeMenuItem]);
   const dispatch = useDispatch();
+  //custom refs
   const canvasRef = useRef(null);
   const drawHistory = useRef([]);
   const historyPointer = useRef(0);
   const shouldDraw = useRef(false);
-  const { activeMenuItem, actionMenuItem } = useSelector((state) => state.menu);
-  const { color, size } = useSelector((state) => state.toolbox[activeMenuItem]);
 
   useCanvasDrawing({
     canvasRef,
