@@ -7,15 +7,15 @@ const useCanvasConfigChange = ({ canvasRef, color, size }) => {
     context.lineWidth = size;
   };
   const handleChangeConfig = (config) => {
-    changeConfig(config.color, config.size);
+    const context = canvasRef.current.getContext("2d");
+    changeConfig(context, config.color, config.size);
   };
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-
-    changeConfig(context, color, size);
+    //for the local changes.
+    handleChangeConfig({ color, size });
+    //for the socket responding to a change.
     socket.on("changeConfig", handleChangeConfig);
 
     return () => {

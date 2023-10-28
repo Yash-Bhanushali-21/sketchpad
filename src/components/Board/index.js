@@ -16,12 +16,7 @@ const Board = () => {
   const historyPointer = useRef(0);
   const shouldDraw = useRef(false);
 
-  useCanvasDrawing({
-    canvasRef,
-    drawHistory,
-    historyPointer,
-    shouldDraw,
-  });
+  useCanvasDrawing({ canvasRef, drawHistory, historyPointer, shouldDraw });
   useCanvasConfigChange({ canvasRef, color, size });
   useMenuItemAction({ canvasRef, actionMenuItem, dispatch });
 

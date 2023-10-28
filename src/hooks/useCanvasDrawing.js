@@ -77,7 +77,7 @@ const useCanvasDrawing = ({
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    // Add event listeners and socket events
+    //event listener registrations
     canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseup", handleMouseUp);
@@ -85,11 +85,11 @@ const useCanvasDrawing = ({
     canvas.addEventListener("touchstart", handleMouseDown);
     canvas.addEventListener("touchmove", handleMouseMove);
     canvas.addEventListener("touchend", handleMouseUp);
-
+    //socket events registerations
     socket.on("beginPath", handleBeginPath);
     socket.on("drawLine", handleDrawLine);
     return () => {
-      // Remove event listeners and socket events
+      // cleanup Remove event listeners and socket events
       canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseup", handleMouseUp);
