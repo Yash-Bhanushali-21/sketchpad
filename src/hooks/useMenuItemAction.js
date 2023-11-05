@@ -2,7 +2,13 @@ import { useEffect } from "react";
 import { actionItemClick } from "@/slice/menuSlice";
 import { MENU_ITEMS } from "@/constants";
 
-const useMenuItemAction = ({ canvasRef, dispatch, actionMenuItem }) => {
+const useMenuItemAction = ({
+  canvasRef,
+  dispatch,
+  historyPointer,
+  drawHistory,
+  actionMenuItem,
+}) => {
   const performDownloadAction = (canvas) => {
     const URL = canvas.toDataURL();
     const anchor = document.createElement("a");

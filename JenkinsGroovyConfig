@@ -1,0 +1,40 @@
+
+pipeline {
+    agent any
+    
+    stages{
+        stage("Code Check-in"){
+            steps {
+                echo "Cloning the Code"
+                git url:"https://github.com/Yash-Bhanushali-21/sketchpad.git", branch : "main"
+                
+            }
+        }
+        stage("Build"){
+            steps {
+                echo "Building the Code"
+                sh "docker build -t sketch-app-frontend ."
+            }
+        }
+        stage("Push Image to Docker Hub"){
+            steps {
+                echo "Pushing the Image to Docker Hub"
+                withCredentials([usernamePassword(credentialsId: "DockerhubCreds",passwordVariable : "dockerHubPass",usernameVariable : "dockerHubUser")]){
+                    sh "docker tag sketch-app-frontend ${env.dockerHubUser}/sketch-app-frontend:latest"
+                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                    sh "docker push ${env.dockerHubUser}/sketch-app-frontend:latest"
+                }
+            }
+        }
+        stage("Deployment"){
+            steps {
+                echo "Deploying the Container"
+                withCredentials([usernamePassword(credentialsId: "DockerhubCreds",passwordVariable : "dockerHubPass",usernameVariable : "dockerHubUser")]){
+                    sh "docker-compose down && docker system prune --all --volumes --force"
+                    sh "dockerHubUser=${env.dockerHubUser} docker-compose up -d"
+                    sh "docker system prune --all --volumes --force"
+                }
+            }
+        }
+    }
+}
