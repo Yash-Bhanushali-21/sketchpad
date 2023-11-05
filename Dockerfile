@@ -10,10 +10,9 @@ COPY package-lock.json package-lock.json
 RUN npm install
 
 # Build the Next.js application for production
-RUN npm run build
-
 COPY . .
+RUN npm run build
 
 EXPOSE $PORT
 
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]
