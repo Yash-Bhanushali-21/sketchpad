@@ -3,27 +3,12 @@ pipeline {
     agent any
     
     stages{
-        stage("Code Check-in"){
+        stage("Pull the latest docker image"){
             steps {
-                echo "Cloning the Code"
-                git url:"https://github.com/Yash-Bhanushali-21/sketchpad.git", branch : "main"
-                
-            }
-        }
-        stage("Build"){
-            steps {
-                echo "Building the Code"
-                sh "docker system prune --all --volumes --force"
-                sh "docker build -t sketch-app-frontend ."
-            }
-        }
-        stage("Push Image to Docker Hub"){
-            steps {
-                echo "Pushing the Image to Docker Hub"
+                echo "Pulling the Image to Docker Hub"
                 withCredentials([usernamePassword(credentialsId: "DockerhubCreds",passwordVariable : "dockerHubPass",usernameVariable : "dockerHubUser")]){
-                    sh "docker tag sketch-app-frontend ${env.dockerHubUser}/sketch-app-frontend:latest"
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                    sh "docker push ${env.dockerHubUser}/sketch-app-frontend:latest"
+                    sh "docker image pull sketch-app-frontend ${env.dockerHubUser}/sketch-app-frontend:latest"
                 }
             }
         }
