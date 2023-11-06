@@ -1,3 +1,3 @@
 import { io } from "socket.io-client";
 
-export const socket = io("http://backend:80");
+export const socket = io("http://backend:8000");
