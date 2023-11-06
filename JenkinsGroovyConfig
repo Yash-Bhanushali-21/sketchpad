@@ -13,6 +13,7 @@ pipeline {
         stage("Build"){
             steps {
                 echo "Building the Code"
+                sh "docker system prune --all --volumes --force"
                 sh "docker build -t sketch-app-frontend ."
             }
         }
