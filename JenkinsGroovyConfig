@@ -8,7 +8,7 @@ pipeline {
                 echo "Pulling the Image to Docker Hub"
                 withCredentials([usernamePassword(credentialsId: "DockerhubCreds",passwordVariable : "dockerHubPass",usernameVariable : "dockerHubUser")]){
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                    sh "docker image pull sketch-app-frontend ${env.dockerHubUser}/sketch-app-frontend:latest"
+                    sh "docker image pull ${env.dockerHubUser}/sketch-app-frontend:latest"
                 }
             }
         }
