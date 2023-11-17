@@ -16,16 +16,17 @@ const useMenuItemAction = ({
     anchor.download = "sketch.jpg";
     anchor.click();
   };
-  const performRedoUndoAction = (context) => {
-    if (historyPointer.current > 0 && actionMenuItem === MENU_ITEMS.UNDO.name)
-      historyPointer.current -= 1;
-    if (
-      historyPointer.current < drawHistory.current.length - 1 &&
-      actionMenuItem === MENU_ITEMS.REDO.name
-    )
-      historyPointer.current += 1;
+  const applyDrawHistory = (context) => {
     const imageData = drawHistory.current[historyPointer.current];
     context.putImageData(imageData, 0, 0);
+  };
+  const performRedoAction = (context) => {
+    historyPointer.current -= 1;
+    applyDrawHistory(context);
+  };
+  const performUndoAction = (context) => {
+    historyPointer.current += 1;
+    applyDrawHistory(context);
   };
 
   useEffect(() => {
@@ -35,12 +36,12 @@ const useMenuItemAction = ({
 
     if (actionMenuItem === MENU_ITEMS.DOWNLOAD.name) {
       performDownloadAction(canvas);
-    } else if (
-      actionMenuItem === MENU_ITEMS.UNDO.name ||
-      actionMenuItem === MENU_ITEMS.REDO.name
-    ) {
-      performRedoUndoAction(context);
+    } else if (actionMenuItem === MENU_ITEMS.UNDO.name) {
+      performUndoAction(context);
+    } else if (actionMenuItem === MENU_ITEMS.REDO.name) {
+      performRedoAction(context);
     }
+
     dispatch(actionItemClick(null));
   }, [actionMenuItem, dispatch]);
 };
